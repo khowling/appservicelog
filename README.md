@@ -19,9 +19,7 @@ NAME=applog$(date +%s | cut -c 6-10)
 
 az group create -n $NAME -l westeurope
 az deployment group create -g $NAME  --template-file ./infra/main.bicep --parameters \
-    name=${NAME} \
-    container=appservicelog:latest
-
+    name=${NAME}
 ```
 
 ## Container Build & Deploy

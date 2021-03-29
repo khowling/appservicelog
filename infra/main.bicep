@@ -1,5 +1,4 @@
 param name string
-param container string
 var location = resourceGroup().location
 
 // ------------------------------------ App Service Plan & WebApp --------------
