@@ -26,10 +26,10 @@ resource site 'Microsoft.Web/sites@2020-09-01' = {
   }
   properties: {
     serverFarmId: farm.id
-    siteConfig: {
-      linuxFxVersion: 'DOCKER|${acr.properties.loginServer}/${container}'
-    }
-    acrUseManagedIdentityCreds: true
+    //siteConfig: {
+    //  linuxFxVersion: 'DOCKER|${acr.properties.loginServer}/${container}'
+    //  acrUseManagedIdentityCreds: true
+    //}
   }
 }
 

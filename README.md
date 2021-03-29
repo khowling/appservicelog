@@ -9,7 +9,7 @@ Example repo to build and deploy custom container to Azure App Service, includes
       * Pull Authorisation for webapp Managed Ideneity
  * `./Dockfile` Example nodejs custom container, with
    * build tasks in ACR to create image
- * `./newrelicfn` <TBC> NewReclic push function
+ * `./newrelicfn` TO-BE-COMPLETED NewReclic push function
 
 ## Provision Infra
 
@@ -24,17 +24,19 @@ az deployment group create -g $NAME  --template-file ./infra/main.bicep --parame
 
 ```
 
-## Container Build
+## Container Build & Deploy
+
+Build (using ACR build tasks)
 
 ```
 az acr build --registry $NAME --image appservicelog:0.1 .
 ```
 
 
-## Deploy to Webapp
+Deploy
 
 ```
-az webapp config container set  -g $NAME -n $NAME \
-    --docker-custom-image-name $NAME.azurecr.io/appservicelog:0.1 \
-    --enable-app-service-storage false
+az resource update --ids  $(az webapp show -g $NAME -n $NAME  --query id --output tsv)/config/web \
+    --set properties.linuxFxVersion="Docker|$NAME.azurecr.io/appservicelog:0.1" \
+    --set properties.acrUseManagedIdentityCreds=True
 ```
