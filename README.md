@@ -18,8 +18,7 @@ Example repo to build and deploy custom container to Azure App Service, includes
 NAME=applog$(date +%s | cut -c 6-10)
 
 az group create -n $NAME -l westeurope
-az deployment group create -g $NAME  --template-file ./infra/main.bicep --parameters \
-    name=${NAME}
+az deployment group create -g $NAME  --template-file ./infra/main.bicep --parameters name=${NAME}
 ```
 
 ## Container Build & Deploy
