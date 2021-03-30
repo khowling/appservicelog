@@ -40,6 +40,7 @@ module.exports = async function main(context, eventHubMessages) {
     let payloads = generatePayloads(buffer, context);
     for (const payload of payloads) {
         try {
+            console.log(`compressing: ${JSON.stringify(payload)}`)
             compressedPayload = await compressData(JSON.stringify(payload));
             try {
                 await retryMax(httpSend, NR_MAX_RETRIES, NR_RETRY_INTERVAL, [
@@ -59,6 +60,7 @@ module.exports = async function main(context, eventHubMessages) {
 };
 
 function compressData(data) {
+
     return new Promise((resolve, reject) => {
         zlib.gzip(data, (e, compressedData) => {
             if (!e) {

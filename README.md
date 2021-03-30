@@ -18,22 +18,32 @@ Example repo to build and deploy custom container to Azure App Service, includes
 NAME=applog$(date +%s | cut -c 6-10)
 
 az group create -n $NAME -l westeurope
-az deployment group create -g $NAME  --template-file ./infra/main.bicep --parameters name=${NAME}
+az deployment group create -g $NAME  --template-file ./infra/main.bicep --parameters \
+  name=${NAME} \
+  NR_LICENSE_KEY=<YOUR NEWRELIC LICENCE KEY>
 ```
 
 ## Container Build & Deploy
 
-Build (using ACR build tasks)
+### Build (using ACR build tasks)
 
 ```
 az acr build --registry $NAME --image appservicelog:0.1 .
 ```
 
 
-Deploy
+### Deploy the container webapp
 
 ```
 az resource update --ids  $(az webapp show -g $NAME -n $NAME  --query id --output tsv)/config/web \
     --set properties.linuxFxVersion="Docker|$NAME.azurecr.io/appservicelog:0.1" \
     --set properties.acrUseManagedIdentityCreds=True
 ```
+
+
+### Deploy the function app (sending to newrelic)
+
+```
+(cd newrelicfn/ && zip -r ../out.zip .)
+ az functionapp deployment source config-zip -g $NAME -n ${NAME}fnlog --src ./out.zip
+ ```

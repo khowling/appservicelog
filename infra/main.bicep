@@ -16,7 +16,7 @@ resource farm 'Microsoft.Web/serverfarms@2020-09-01' = {
   }
 }
 
-resource site 'Microsoft.Web/sites@2020-09-01' = {
+resource site 'Microsoft.Web/sites@2020-10-01' = {
   name: name
   location: location
   kind: 'app,linux,container'
@@ -28,7 +28,52 @@ resource site 'Microsoft.Web/sites@2020-09-01' = {
   }
 }
 
-// ------------------------------------ ACR and Pull Auth --------------
+// ------------------------------------    Loggining Function App         --------------
+param NR_LICENSE_KEY string = ''
+
+resource fnstore 'Microsoft.Storage/storageAccounts@2021-01-01' = if (!empty(NR_LICENSE_KEY)) {
+  name: name
+  location: location
+  kind: 'StorageV2'
+  sku: {
+    name: 'Standard_LRS'
+  }
+}
+
+resource fnlog 'Microsoft.Web/sites@2020-10-01' = if (!empty(NR_LICENSE_KEY)) {
+  name: '${name}fnlog'
+  location: location
+  kind: 'functionapp,linux'
+  identity: {
+    type: 'SystemAssigned'
+  }
+  properties: {
+    serverFarmId: farm.id
+    siteConfig: {
+      linuxFxVersion: 'node|14'
+      appSettings: [
+        {
+          name: 'AzureWebJobsStorage'
+          value: 'DefaultEndpointsProtocol=https;AccountName=${fnstore.name};AccountKey=${listKeys(fnstore.id, '2021-01-01').keys[0].value};EndpointSuffix=core.windows.net'
+        }
+        {
+          name: 'FUNCTIONS_EXTENSION_VERSION'
+          value: '~3'
+        }
+        {
+          name: 'loggingHub'
+          value: listKeys(ehauth.id, '2017-04-01').primaryConnectionString
+        }
+        {
+          name: 'NR_LICENSE_KEY'
+          value: NR_LICENSE_KEY
+        }
+      ]
+    }
+  }
+}
+
+// ------------------------------------      ACR and Pull Auth       --------------
 
 resource acr 'Microsoft.ContainerRegistry/registries@2019-05-01' = {
   name: name
