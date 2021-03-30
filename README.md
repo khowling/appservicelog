@@ -9,7 +9,7 @@ Example repo to build and deploy custom container to Azure App Service, includes
       * Pull Authorisation for webapp Managed Ideneity
  * `./Dockfile` Example nodejs custom container, with
    * build tasks in ACR to create image
- * `./newrelicfn` TO-BE-COMPLETED NewReclic push function
+ * `./newrelicfn` function app that pushes the Diagnostic data to NewReclic
 
 ## Provision Infra
 
