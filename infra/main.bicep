@@ -25,6 +25,10 @@ resource site 'Microsoft.Web/sites@2020-10-01' = {
   }
   properties: {
     serverFarmId: farm.id
+    clientAffinityEnabled: false
+    siteConfig: {
+      alwaysOn: true
+    }
   }
 }
 
