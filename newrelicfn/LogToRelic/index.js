@@ -16,7 +16,7 @@ const VERSION = '0.0.0-development';
 const NR_LICENSE_KEY = process.env.NR_LICENSE_KEY;
 const NR_INSERT_KEY = process.env.NR_INSERT_KEY;
 const NR_ENDPOINT =
-    process.env.NR_ENDPOINT || 'https://log-api.newrelic.com/log/v1';
+    process.env.NR_ENDPOINT || 'https://log-api.eu.newrelic.com/log/v1';
 const NR_TAGS = process.env.NR_TAGS; // Semicolon-seperated tags
 const NR_LOGS_SOURCE = 'azure';
 const NR_MAX_PAYLOAD_SIZE = 1000 * 1024;
