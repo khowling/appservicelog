@@ -1,3 +1,5 @@
+//   This file is a copy from the great work done in:  https://github.com/newrelic/newrelic-azure-functions
+
 /**
  * This is an azure function to collect logs data from EventHub and send it to New Relic logs API.
  *    Author: Amine Benzaied
